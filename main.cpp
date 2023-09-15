@@ -37,7 +37,7 @@ int main() {
 
     std::shared_ptr<Scene> scene = std::make_shared<Scene>(context.graphics, context.audio, context.inputs);
 
-    scene->add_entity(std::make_shared<Animalese>(scene));
+    scene->add_entity(std::make_shared<Animalese>(scene, "Hello, Grayson, how are you?"));
 
     while (*context.loop) {
         game_loop(context, scene);

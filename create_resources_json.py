@@ -15,13 +15,13 @@ for filename in filenames:
 
     # Construct the value (relative path) for the dictionary
     sound_value = "kiza_kana/" + filename
-    sounds_dict[sound_key] = sound_value
+    sounds_dict[sound_key] = ""
 
 # Create final JSON dictionary
 final_dict = {"sounds": sounds_dict}
 
 # Write to resources.json
-with open("resources.json", "w") as file:
+with open("resources_test.json", "w") as file:
     json.dump(final_dict, file, indent=4)
 
 print("resources.json created successfully")
