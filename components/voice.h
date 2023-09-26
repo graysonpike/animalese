@@ -1,19 +1,23 @@
-#ifndef ANIMALESE_H
-#define ANIMALESE_H
+#ifndef VOICE_H
+#define VOICE_H
 
 #include <sdlgl/game/entity.h>
 #include <sdlgl/game/timer.h>
 #include <sdlgl/audio/sound.h>
 
 
-class Animalese : public Entity {
+class Voice {
 
     std::map<char, Sound> sounds;
     std::string text;
+    float pitch;
     int text_index;
     Timer sound_timer;
     bool speaking;
 
+    char to_lowercase(char c);
+    std::string shorten_word(const std::string& str);
+    std::string shorten_text(const std::string& text);
     void play_sound_for_char(char c);
     void play_next_sound();
 
@@ -23,10 +27,10 @@ class Animalese : public Entity {
 
 
 public:
-    Animalese(const std::shared_ptr<Scene>& scene, const std::string& text);
-
-    void update() override;
-    void render() override;
+    explicit Voice(float pitch = 1.5f);
+    void set_text(const std::string &text);
+    void speak();
+    void update();
 
 };
 
