@@ -1,16 +1,19 @@
+#include "voice.h"
+
+#include <sdlgl/audio/sound.h>
+#include <sdlgl/utilities/random.h>
+
+#include <cctype>
 #include <iostream>
 #include <map>
 #include <string>
-#include <sstream>
-#include <cctype>
-#include <sdlgl/audio/sound.h>
-#include <sdlgl/utilities/random.h>
-#include "voice.h"
 
+#include "../utilities/text_utils.h"
 
-Voice::Voice(float pitch) : text_index(0), sound_timer(Timer(0.08f)), speaking(false), pitch(pitch) {
-    const std::map<char, std::string>& translation_map = get_translation_map();
-    for (const auto& kv : translation_map) {
+Voice::Voice(float pitch)
+    : text_index(0), sound_timer(Timer(0.08f)), speaking(false), pitch(pitch) {
+    const std::map<char, std::string> &translation_map = get_translation_map();
+    for (const auto &kv : translation_map) {
         Sound sound = Sound("kiza_kana/" + kv.second, 2);
         sound.set_pitch(pitch);
         sounds.emplace(kv.first, sound);
@@ -18,7 +21,7 @@ Voice::Voice(float pitch) : text_index(0), sound_timer(Timer(0.08f)), speaking(f
 }
 
 void Voice::set_text(const std::string &text) {
-    this->text = shorten_text(text);
+    this->text = TextUtils::shorten_text(text);
     text_index = 0;
 }
 
@@ -26,38 +29,10 @@ void Voice::speak() {
     if (!text.empty()) {
         speaking = true;
         play_next_sound();
-        sound_timer.reset();
     } else {
-        std::cout << "Error: Attempted to speak Voice with an empty string." << std::endl;
+        std::cout << "Error: Attempted to speak Voice with an empty string."
+                  << std::endl;
     }
-}
-
-char Voice::to_lowercase(char c) {
-    return std::tolower(static_cast<unsigned char>(c));
-}
-
-std::string Voice::shorten_word(const std::string& str) {
-    if (str.size() > 1) {
-        return std::string(1, str[0]) + str[str.size() - 1];
-    }
-    return str;
-}
-
-std::string Voice::shorten_text(const std::string& text) {
-    std::istringstream iss(text);
-    std::string word;
-    std::string result;
-
-    while (iss >> word) {
-        std::string cleanedWord;
-        for (char c : word) {
-            if (std::isalpha(c)) {
-                cleanedWord += c;
-            }
-        }
-        result += shorten_word(cleanedWord);
-    }
-    return result;
 }
 
 void Voice::play_sound_for_char(char c) {
@@ -65,19 +40,20 @@ void Voice::play_sound_for_char(char c) {
         Sound &sound = sounds.at(c);
         sound.set_pitch(Random::randfloat(pitch - 0.05f, pitch + 0.05f));
         sound.play();
-    } catch (const std::out_of_range&) {
+    } catch (const std::out_of_range &) {
         // Handle the error or do nothing if you expect some keys to be missing
     }
 }
 
 void Voice::play_next_sound() {
-    char next_char = to_lowercase(text[text_index]);
+    char next_char = TextUtils::to_lowercase(text[text_index]);
     play_sound_for_char(next_char);
-    text_index ++;
+    text_index++;
     if (text_index == text.size()) {
         text_index = 0;
         speaking = false;
     }
+    sound_timer.reset();
 }
 
 void Voice::update() {
@@ -88,7 +64,8 @@ void Voice::update() {
 }
 
 const std::map<char, std::string> &Voice::get_translation_map() {
-    static const std::map<char, std::string> translation_map = initialize_translation_map();
+    static const std::map<char, std::string> translation_map =
+        initialize_translation_map();
     return translation_map;
 }
 

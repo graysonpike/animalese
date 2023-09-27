@@ -1,13 +1,12 @@
-#include <iostream>
-
-#include <sdlgl/graphics/graphics.h>
-#include <sdlgl/game/context.h>
 #include <sdlgl/audio/audio.h>
 #include <sdlgl/audio/sound.h>
+#include <sdlgl/game/context.h>
+#include <sdlgl/graphics/graphics.h>
+
+#include <iostream>
 
 #include "components/voice.h"
 #include "entities/dialogue.h"
-
 
 int main() {
     Graphics::initialize(640, 480);

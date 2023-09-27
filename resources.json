@@ -1,5 +1,11 @@
 {
     "textures": {
         "devika": {"filename": "devika_200.png"}
+    },
+    "fonts": {
+        "base_text": {
+            "filename": "Inconsolata/Inconsolata-Regular.ttf",
+            "size": 16
+        }
     }
 }
