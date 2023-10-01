@@ -7,7 +7,7 @@ Dialogue::Dialogue(const std::shared_ptr<Scene> &scene, Voice &voice, Texture fa
 
 void Dialogue::update() {
     if (Inputs::get_instance().is_key_down_event(SDL_SCANCODE_SPACE)) {
-        std::string text = "This is some sample text. I am using it to see if the typewriter and the voice are in sync!";
+        std::string text = "Hello! My name is Devika and I am a cutie patootie!";
         voice.set_text(text);
         voice.speak();
         typewriter.set_text(text);

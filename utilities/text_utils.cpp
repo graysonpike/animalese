@@ -8,7 +8,7 @@ char TextUtils::to_lowercase(char c) {
 
 std::string TextUtils::shorten_word(const std::string &str) {
     if (str.size() > 1) {
-        return std::string(1, str[0]) + str[str.size() - 1];
+        return std::string(1, str[0]);
     }
     return str;
 }

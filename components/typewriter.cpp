@@ -44,9 +44,6 @@ void Typewriter::update() {
 }
 
 float Typewriter::get_typing_duration_for_word(const std::string &word) {
-    if (word.size() > 1) {
-        return 0.16f;
-    }
     return 0.08f;
 }
 
