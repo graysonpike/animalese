@@ -51,6 +51,13 @@ make
 
 The default target is `main.out`, the executable program.
 
+## Usage
+
+Run the executable `main.out` after building the project. It will read the
+paragraphs specified in `paragraphs.json` and load them into the dialogue.
+
+Pressing the space bar will cycle through the paragraphs.
+
 ## Development
 
 ### Additional Development Requirements
