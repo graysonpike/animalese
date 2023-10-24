@@ -6,12 +6,16 @@
 #include <cctype>
 #include <iostream>
 #include <map>
+#include <sstream>
 #include <string>
 
 #include "../utilities/text_utils.h"
 
-Voice::Voice(float pitch)
-    : text_index(0), sound_timer(Timer(0.08f)), speaking(false), pitch(pitch) {
+Voice::Voice(float pitch, float word_duration)
+    : text_index(0),
+      sound_timer(Timer(word_duration)),
+      speaking(false),
+      pitch(pitch) {
     const std::map<char, std::string> &translation_map = get_translation_map();
     for (const auto &kv : translation_map) {
         Sound sound = Sound("kiza_kana/" + kv.second, 2);
@@ -21,7 +25,7 @@ Voice::Voice(float pitch)
 }
 
 void Voice::set_text(const std::string &text) {
-    this->text = TextUtils::shorten_text(text);
+    this->text = shorten_text(text);
     text_index = 0;
 }
 
@@ -35,14 +39,17 @@ void Voice::speak() {
     }
 }
 
-void Voice::play_sound_for_char(char c) {
-    try {
-        Sound &sound = sounds.at(c);
-        sound.set_pitch(Random::randfloat(pitch - 0.05f, pitch + 0.05f));
-        sound.play();
-    } catch (const std::out_of_range &) {
-        // Handle the error or do nothing if you expect some keys to be missing
+void Voice::update() {
+    if (speaking && sound_timer.is_done()) {
+        play_next_sound();
+        sound_timer.reset();
     }
+}
+
+void Voice::play_sound_for_char(char c) {
+    Sound &sound = sounds.at(c);
+    sound.set_pitch(Random::randfloat(pitch - 0.05f, pitch + 0.05f));
+    sound.play();
 }
 
 void Voice::play_next_sound() {
@@ -56,11 +63,23 @@ void Voice::play_next_sound() {
     sound_timer.reset();
 }
 
-void Voice::update() {
-    if (speaking && sound_timer.is_done()) {
-        play_next_sound();
-        sound_timer.reset();
+std::string Voice::shorten_text(const std::string &text) {
+    std::istringstream iss(text);
+    std::string word;
+    std::string result;
+
+    while (iss >> word) {
+        std::string cleaned_word;
+        for (char c : word) {
+            if (std::isalpha(c)) {
+                cleaned_word += c;
+            }
+        }
+        if (!cleaned_word.empty()) {
+            result += std::string(1, cleaned_word[0]);
+        }
     }
+    return result;
 }
 
 const std::map<char, std::string> &Voice::get_translation_map() {

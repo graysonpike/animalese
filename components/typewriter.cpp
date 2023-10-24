@@ -1,7 +1,6 @@
 #include "typewriter.h"
 
 #include <SDL2/SDL.h>
-#include <sdlgl/game/timer.h>
 #include <sdlgl/graphics/graphics.h>
 
 #include <iostream>
@@ -11,21 +10,15 @@
 
 Typewriter::Typewriter() {}
 
-Typewriter::Typewriter(int x, int y, std::string  font, SDL_Color color)
+Typewriter::Typewriter(int x, int y, std::string font, SDL_Color color,
+                       float word_duration)
     : x(x),
       y(y),
       font(std::move(font)),
       color(color),
-      typing_timer(Timer(0.08f)),
+      typing_timer(word_duration),
       typing(false),
       word_index(0) {}
-
-void Typewriter::set_text(const std::string &text) {
-    this->text = text;
-    words = TextUtils::get_words_from_text(text);
-    displayed_text = "";
-    word_index = 0;
-}
 
 void Typewriter::type() {
     if (!text.empty()) {
@@ -37,31 +30,16 @@ void Typewriter::type() {
     }
 }
 
+void Typewriter::set_text(const std::string &text) {
+    this->text = text;
+    words = TextUtils::get_words_from_text(text);
+    displayed_text = "";
+    word_index = 0;
+}
+
 void Typewriter::update() {
     if (typing && typing_timer.is_done()) {
         type_next_word();
-    }
-}
-
-float Typewriter::get_typing_duration_for_word(const std::string &word) {
-    return 0.08f;
-}
-
-void Typewriter::type_next_word() {
-    if (word_index == words.size()) {
-        std::cout << "Error: Attempted to type word beyond available text."
-                  << std::endl;
-        return;
-    }
-    displayed_text += words[word_index];
-    typing_timer.set_duration(get_typing_duration_for_word(words[word_index]));
-    typing_timer.reset();
-    word_index++;
-    if (word_index == words.size()) {
-        word_index = 0;
-        typing = false;
-    } else {
-        displayed_text += " ";
     }
 }
 
@@ -78,4 +56,21 @@ void Typewriter::render() {
     SDL_Rect dst = {x, y, texture_width, texture_height};
     SDL_RenderCopy(Graphics::get_instance().get_renderer().get(),
                    text_texture.get(), NULL, &dst);
+}
+
+void Typewriter::type_next_word() {
+    if (word_index == words.size()) {
+        std::cout << "Error: Attempted to type word beyond available text."
+                  << std::endl;
+        return;
+    }
+    displayed_text += words[word_index];
+    typing_timer.reset();
+    word_index++;
+    if (word_index == words.size()) {
+        word_index = 0;
+        typing = false;
+    } else {
+        displayed_text += " ";
+    }
 }

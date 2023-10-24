@@ -6,7 +6,22 @@
 
 #include <string>
 
+// Renders text to the screen one word at a time to give a typewriter effect.
 class Typewriter {
+   public:
+    Typewriter();
+    Typewriter(int x, int y, std::string font = "base_text",
+               SDL_Color color = {0, 0, 0}, float word_duration = 0.08f);
+    // Sets the text to be typed when `type()` is called.
+    void set_text(const std::string& text);
+    // Begins typing the currently set text to the screen.
+    void type();
+    // Must be called by parent's `update()` function.
+    void update();
+    // Must be called by parent's `render()` function.
+    void render();
+
+   private:
     int x;
     int y;
     std::string font;
@@ -19,16 +34,6 @@ class Typewriter {
     bool typing;
 
     void type_next_word();
-    static float get_typing_duration_for_word(const std::string& word);
-
-   public:
-    Typewriter();
-    Typewriter(int x, int y, std::string font = "base_text",
-               SDL_Color color = {0, 0, 0});
-    void set_text(const std::string &text);
-    void type();
-    void update();
-    void render();
 };
 
 #endif  // ANIMALESE_TYPEWRITER_H

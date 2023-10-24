@@ -3,10 +3,28 @@
 #include <sdlgl/game/context.h>
 #include <sdlgl/graphics/graphics.h>
 
+#include <fstream>
 #include <iostream>
 
 #include "components/voice.h"
+#include "dependencies/json.hpp"
 #include "entities/dialogue.h"
+
+// for convenience
+using json = nlohmann::json;
+
+std::vector<std::string> get_paragraphs_from_json() {
+    // Read JSON object from resources file
+    std::ifstream file("paragraphs.json");
+    json paragraphs_json;
+    file >> paragraphs_json;
+    std::vector<std::string> paragraphs;
+    for (json::iterator it = paragraphs_json["paragraphs"].begin();
+         it != paragraphs_json["paragraphs"].end(); it++) {
+        paragraphs.push_back(it.value());
+    }
+    return paragraphs;
+}
 
 int main() {
     Graphics::initialize(640, 480);
@@ -16,10 +34,11 @@ int main() {
 
     Audio::get_instance();
 
-    // 1.3 and 1.5 are the pitches for female and male respectively
+    // 1.3 and 1.5 are the pitches for male and female respectively
     Voice voice = Voice(1.5f);
     Texture devika_face = Resources::get_instance().get_texture("devika");
-    scene->add_entity(std::make_shared<Dialogue>(scene, voice, devika_face));
+    scene->add_entity(
+        std::make_shared<Dialogue>(scene, voice, devika_face, get_paragraphs_from_json()));
 
     Graphics &graphics = Graphics::get_instance();
     Inputs &inputs = Inputs::get_instance();

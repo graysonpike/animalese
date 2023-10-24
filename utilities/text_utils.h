@@ -6,8 +6,12 @@
 class TextUtils {
    public:
     static char to_lowercase(char c);
-    static std::string shorten_word(const std::string &str);
+    // Given a string of text, returns a shortened version where all words are
+    // reduced to their first character and non-alphabetical characters are
+    // removed.
     static std::string shorten_text(const std::string &text);
+    // Given a string of text, returns a list of the individual words from the
+    // text, as delimited by the space character.
     static std::vector<std::string> get_words_from_text(
         const std::string &text);
 };
