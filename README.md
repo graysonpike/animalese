@@ -38,8 +38,9 @@ provided Makefile.
 
 ### Dependencies
 
-Before building, you will need to build and install the SDLGL game
-library using [these instructions](https://github.com/graysonpike/sdlgl).
+Before building, you will need to build and install
+[version 0.1.0](https://github.com/graysonpike/sdlgl/releases/tag/v0.1.0)
+of the SDLGL game library by following the instructions in the README file.
 
 ### Building
 
