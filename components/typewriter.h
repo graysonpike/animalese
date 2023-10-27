@@ -12,14 +12,16 @@ class Typewriter {
     Typewriter();
     Typewriter(int x, int y, std::string font = "base_text",
                SDL_Color color = {0, 0, 0}, float word_duration = 0.08f);
-    // Sets the text to be typed when `type()` is called.
-    void set_text(const std::string& text);
-    // Begins typing the currently set text to the screen.
-    void type();
     // Must be called by parent's `update()` function.
     void update();
     // Must be called by parent's `render()` function.
     void render();
+    // Sets the text to be typed when `type()` is called.
+    void set_text(std::string new_text);
+    // Begins typing the currently set text to the screen.
+    void type();
+    // Stops typewriter effect and immediately displays the full text
+    void skip_to_end();
 
    private:
     int x;

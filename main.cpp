@@ -8,22 +8,44 @@
 
 #include "components/voice.h"
 #include "dependencies/json.hpp"
+#include "entities/conversation.h"
 #include "entities/dialogue.h"
 
 // for convenience
 using json = nlohmann::json;
 
-std::vector<std::string> get_paragraphs_from_json() {
+std::vector<ConversationEntry> get_script() {
     // Read JSON object from resources file
-    std::ifstream file("paragraphs.json");
+    std::ifstream file("script.json");
     json paragraphs_json;
     file >> paragraphs_json;
-    std::vector<std::string> paragraphs;
-    for (json::iterator it = paragraphs_json["paragraphs"].begin();
-         it != paragraphs_json["paragraphs"].end(); it++) {
-        paragraphs.push_back(it.value());
+    std::vector<ConversationEntry> script;
+    for (json::iterator it = paragraphs_json["script"].begin();
+         it != paragraphs_json["script"].end(); it++) {
+        script.push_back({it.value()["character"], it.value()["text"]});
     }
-    return paragraphs;
+    return script;
+}
+
+std::shared_ptr<Conversation> create_demo_conversation_entity(
+    std::shared_ptr<Scene> scene) {
+    // 1.3 and 1.5 are the pitches for male and female respectively
+    Texture devika_face = Resources::get_instance().get_texture("devika");
+    Dialogue devika_dialogue =
+        Dialogue(scene, std::make_shared<Voice>(1.5f), devika_face);
+
+    Texture grayson_face = Resources::get_instance().get_texture("devika");
+    Dialogue grayson_dialogue =
+        Dialogue(scene, std::make_shared<Voice>(1.3f), grayson_face);
+
+    std::map<std::string, Dialogue> characters;
+    characters.emplace("devika", devika_dialogue);
+    characters.emplace("grayson", grayson_dialogue);
+
+    std::shared_ptr<Conversation> conversation =
+        std::make_shared<Conversation>(scene, characters, get_script());
+    scene->add_entity(conversation);
+    return conversation;
 }
 
 int main() {
@@ -34,11 +56,8 @@ int main() {
 
     Audio::get_instance();
 
-    // 1.3 and 1.5 are the pitches for male and female respectively
-    Voice voice = Voice(1.5f);
-    Texture devika_face = Resources::get_instance().get_texture("devika");
-    scene->add_entity(
-        std::make_shared<Dialogue>(scene, voice, devika_face, get_paragraphs_from_json()));
+    std::shared_ptr<Conversation> conversation =
+        create_demo_conversation_entity(scene);
 
     Graphics &graphics = Graphics::get_instance();
     Inputs &inputs = Inputs::get_instance();
@@ -54,6 +73,14 @@ int main() {
         scene->render();
 
         graphics.present_renderer(context.clock->get_delta());
+
+        if (inputs.is_key_down_event(SDL_SCANCODE_SPACE)) {
+            if (conversation->is_finished()) {
+                conversation->reset_to_beginning();
+            } else {
+                conversation->fast_forward_or_next_entry();
+            }
+        }
 
         // If ESC or 'X' button is pressed, leave the update loop and exit
         if (inputs.get_quit()) {

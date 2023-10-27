@@ -10,12 +10,14 @@
 class Voice {
    public:
     explicit Voice(float pitch = 1.5f, float word_duration = 0.08f);
-    // Sets the text that will be spoken when `speak()` is called.
-    void set_text(const std::string &text);
-    // Begins playing Animalese for the currently set text.
-    void speak();
     // Must be called as part of parent's `update()` function.
     void update();
+    // Sets the text that will be spoken when `speak()` is called.
+    void set_text(std::string new_text);
+    // Begins playing Animalese for the currently set text.
+    void speak();
+    bool is_speaking();
+    void stop_speaking();
 
    private:
     std::map<char, Sound> sounds;
@@ -27,8 +29,8 @@ class Voice {
 
     void play_sound_for_char(char c);
     void play_next_sound();
-    static const std::map<char, std::string> &get_translation_map();
-    static std::map<char, std::string> initialize_translation_map();
+    // Mapping of character of the alphabet to sound files
+    static const std::map<char, std::string> translation_map;
     // Given a string of text, returns a shortened version where all words are
     // reduced to their first character and non-alphabetical characters are
     // removed. Characters are lowercased. For example

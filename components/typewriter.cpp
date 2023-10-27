@@ -21,20 +21,31 @@ Typewriter::Typewriter(int x, int y, std::string font, SDL_Color color,
       word_index(0) {}
 
 void Typewriter::type() {
-    if (!text.empty()) {
-        typing = true;
-        type_next_word();
-    } else {
+    if (text.empty()) {
         std::cout << "Error: Attempted to speak Voice with an empty string."
                   << std::endl;
+        return;
     }
+    word_index = 0;
+    displayed_text = "";
+    typing = true;
+    type_next_word();
 }
 
-void Typewriter::set_text(const std::string &text) {
-    this->text = text;
+void Typewriter::set_text(std::string new_text) {
+    if (typing) {
+        typing = false;
+        std::cout << "Warning, tried to set text while typing. Stopping "
+                     "previous typing effect."
+                  << std::endl;
+    }
+    this->text = new_text;
     words = TextUtils::get_words_from_text(text);
-    displayed_text = "";
-    word_index = 0;
+}
+
+void Typewriter::skip_to_end() {
+    displayed_text = text;
+    typing = false;
 }
 
 void Typewriter::update() {
@@ -59,7 +70,7 @@ void Typewriter::render() {
 }
 
 void Typewriter::type_next_word() {
-    if (word_index == words.size()) {
+    if (word_index >= words.size()) {
         std::cout << "Error: Attempted to type word beyond available text."
                   << std::endl;
         return;

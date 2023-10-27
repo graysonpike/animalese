@@ -16,7 +16,6 @@ Voice::Voice(float pitch, float word_duration)
       sound_timer(Timer(word_duration)),
       speaking(false),
       pitch(pitch) {
-    const std::map<char, std::string> &translation_map = get_translation_map();
     for (const auto &kv : translation_map) {
         Sound sound = Sound("kiza_kana/" + kv.second, 2);
         sound.set_pitch(pitch);
@@ -24,19 +23,25 @@ Voice::Voice(float pitch, float word_duration)
     }
 }
 
-void Voice::set_text(const std::string &text) {
-    this->text = shorten_text(text);
-    text_index = 0;
+void Voice::set_text(std::string new_text) {
+    if (speaking) {
+        std::cout
+            << "Warning, tried to set text while speaking. Skipping speaking."
+            << std::endl;
+        stop_speaking();
+    }
+    this->text = shorten_text(new_text);
 }
 
 void Voice::speak() {
-    if (!text.empty()) {
-        speaking = true;
-        play_next_sound();
-    } else {
+    text_index = 0;
+    if (text.empty()) {
         std::cout << "Error: Attempted to speak Voice with an empty string."
                   << std::endl;
+        return;
     }
+    speaking = true;
+    play_next_sound();
 }
 
 void Voice::update() {
@@ -45,6 +50,10 @@ void Voice::update() {
         sound_timer.reset();
     }
 }
+
+bool Voice::is_speaking() { return speaking; }
+
+void Voice::stop_speaking() { speaking = false; }
 
 void Voice::play_sound_for_char(char c) {
     Sound &sound = sounds.at(c);
@@ -57,7 +66,6 @@ void Voice::play_next_sound() {
     play_sound_for_char(next_char);
     text_index++;
     if (text_index == text.size()) {
-        text_index = 0;
         speaking = false;
     }
     sound_timer.reset();
@@ -82,39 +90,30 @@ std::string Voice::shorten_text(const std::string &text) {
     return result;
 }
 
-const std::map<char, std::string> &Voice::get_translation_map() {
-    static const std::map<char, std::string> translation_map =
-        initialize_translation_map();
-    return translation_map;
-}
-
-std::map<char, std::string> Voice::initialize_translation_map() {
-    std::map<char, std::string> m;
-    m['a'] = "Voice_Kiza_Kana_a - Voice_Kiza_KanaEx_aa - Voice_Kiza_Loop_a.wav";
-    m['b'] = "Voice_Kiza_Kana_bo.wav";
-    m['c'] = "Voice_Kiza_Kana_ha.wav";
-    m['d'] = "Voice_Kiza_Kana_di.wav";
-    m['e'] = "Voice_Kiza_Kana_e - Voice_Kiza_KanaEx_ee.wav";
-    m['f'] = "Voice_Kiza_Kana_fe.wav";
-    m['g'] = "Voice_Kiza_Kana_ga.wav";
-    m['h'] = "Voice_Kiza_Kana_ha.wav";
-    m['i'] = "Voice_Kiza_Kana_i - Voice_Kiza_KanaEx_ii.wav";
-    m['j'] = "Voice_Kiza_Kana_ja.wav";
-    m['k'] = "Voice_Kiza_Kana_ka.wav";
-    m['l'] = "Voice_Kiza_KanaEx_ewo.wav";
-    m['m'] = "Voice_Kiza_Kana_ma.wav";
-    m['n'] = "Voice_Kiza_Kana_na.wav";
-    m['o'] = "Voice_Kiza_Kana_o - Voice_Kiza_KanaEx_oo.wav";
-    m['p'] = "Voice_Kiza_Kana_pa.wav";
-    m['q'] = "Voice_Kiza_Kana_ku.wav";
-    m['r'] = "Voice_Kiza_Kana_ra.wav";
-    m['s'] = "Voice_Kiza_KanaEx_ehi.wav";
-    m['t'] = "Voice_Kiza_Kana_ta.wav";
-    m['u'] = "Voice_Kiza_Kana_u - Voice_Kiza_KanaEx_uu.wav";
-    m['v'] = "Voice_Kiza_Kana_bi.wav";
-    m['w'] = "Voice_Kiza_Kana_wa.wav";
-    m['x'] = "Voice_Kiza_KanaEx_ehe.wav";
-    m['y'] = "Voice_Kiza_Kana_ya.wav";
-    m['z'] = "Voice_Kiza_Kana_za.wav";
-    return m;
-}
+const std::map<char, std::string> Voice::translation_map = {
+    {'a', "Voice_Kiza_Kana_a - Voice_Kiza_KanaEx_aa - Voice_Kiza_Loop_a.wav"},
+    {'b', "Voice_Kiza_Kana_bo.wav"},
+    {'c', "Voice_Kiza_Kana_ha.wav"},
+    {'d', "Voice_Kiza_Kana_di.wav"},
+    {'e', "Voice_Kiza_Kana_e - Voice_Kiza_KanaEx_ee.wav"},
+    {'f', "Voice_Kiza_Kana_fe.wav"},
+    {'g', "Voice_Kiza_Kana_ga.wav"},
+    {'h', "Voice_Kiza_Kana_ha.wav"},
+    {'i', "Voice_Kiza_Kana_i - Voice_Kiza_KanaEx_ii.wav"},
+    {'j', "Voice_Kiza_Kana_ja.wav"},
+    {'k', "Voice_Kiza_Kana_ka.wav"},
+    {'l', "Voice_Kiza_KanaEx_ewo.wav"},
+    {'m', "Voice_Kiza_Kana_ma.wav"},
+    {'n', "Voice_Kiza_Kana_na.wav"},
+    {'o', "Voice_Kiza_Kana_o - Voice_Kiza_KanaEx_oo.wav"},
+    {'p', "Voice_Kiza_Kana_pa.wav"},
+    {'q', "Voice_Kiza_Kana_ku.wav"},
+    {'r', "Voice_Kiza_Kana_ra.wav"},
+    {'s', "Voice_Kiza_KanaEx_ehi.wav"},
+    {'t', "Voice_Kiza_Kana_ta.wav"},
+    {'u', "Voice_Kiza_Kana_u - Voice_Kiza_KanaEx_uu.wav"},
+    {'v', "Voice_Kiza_Kana_bi.wav"},
+    {'w', "Voice_Kiza_Kana_wa.wav"},
+    {'x', "Voice_Kiza_KanaEx_ehe.wav"},
+    {'y', "Voice_Kiza_Kana_ya.wav"},
+    {'z', "Voice_Kiza_Kana_za.wav"}};

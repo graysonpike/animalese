@@ -1,3 +1,5 @@
+#ifndef ANIMALESE_DIALOGUE_H
+#define ANIMALESE_DIALOGUE_H
 #include <sdlgl/game/physical_entity.h>
 
 #include "../components/typewriter.h"
@@ -9,15 +11,22 @@
 // begin speaking and typing the next paragraph.
 class Dialogue : public PhysicalEntity {
    public:
-    Dialogue(const std::shared_ptr<Scene> &scene, Voice &voice, Texture face,
-             std::vector<std::string> paragraphs);
+    Dialogue(const std::shared_ptr<Scene> &scene, std::shared_ptr<Voice> voice,
+             Texture face, std::string text = "");
     void update() override;
     void render() override;
+    void speak();
+    bool is_speaking();
+    // Stops voice and skips to end of typewriter effect, displaying the full
+    // text.
+    void skip_speaking();
+    void set_text(std::string new_text);
 
    private:
-    Voice &voice;
-    Typewriter typewriter;
+    std::shared_ptr<Voice> voice;
+    std::shared_ptr<Typewriter> typewriter;
     Texture face;
-    std::vector<std::string> paragraphs;
-    int paragraph_index;
+    std::string text;
 };
+
+#endif

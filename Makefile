@@ -7,6 +7,7 @@ LIBS  = -lsdlgl -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer -lpthread -lm -ldl
 
 OBJ_FILES = main.o \
 			entities/dialogue.o \
+			entities/conversation.o \
 			components/voice.o \
 			components/typewriter.o \
 			utilities/text_utils.o

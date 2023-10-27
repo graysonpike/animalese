@@ -1,0 +1,9 @@
+{
+    "script": [
+        {"character":  "devika", "text": "This is a demo of the Animalese conversation dialogue!"},
+        {"character":  "grayson", "text":  "Animalese supports any pitch of voice."},
+        {"character":  "devika", "text":  "It also makes configurable conversations really easy. Try it yourself!"},
+        {"character":  "grayson", "text":  "Use the JSON file to create your own conversation."},
+        {"character":  "devika", "text":  "Let's see how this dialogue box supports really long sentences. Oh wow, Grayson even implemented text wrapping!"}
+    ]
+}

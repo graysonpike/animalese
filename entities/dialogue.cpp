@@ -1,29 +1,38 @@
 #include "dialogue.h"
 
-Dialogue::Dialogue(const std::shared_ptr<Scene> &scene, Voice &voice,
-                   Texture face, std::vector<std::string> paragraphs)
-    : PhysicalEntity(scene, 0, 0, 400, 200),
-      voice(voice),
-      face(face),
-      paragraphs(paragraphs),
-      paragraph_index(0) {
-    typewriter = Typewriter(x + 200, y + 100);
+#include <iostream>
+
+Dialogue::Dialogue(const std::shared_ptr<Scene> &scene,
+                   std::shared_ptr<Voice> voice, Texture face, std::string text)
+    : PhysicalEntity(scene, 0, 0, 400, 200), voice(voice), face(face) {
+    typewriter = std::make_shared<Typewriter>(x + 200, y + 100);
+    set_text(text);
 }
 
 void Dialogue::update() {
-    if (Inputs::get_instance().is_key_down_event(SDL_SCANCODE_SPACE)) {
-        voice.set_text(paragraphs[paragraph_index]);
-        voice.speak();
-        typewriter.set_text(paragraphs[paragraph_index]);
-        typewriter.type();
-        paragraph_index += 1;
-        paragraph_index %= paragraphs.size();
-    }
-    voice.update();
-    typewriter.update();
+    voice->update();
+    typewriter->update();
 }
 
 void Dialogue::render() {
     face.draw(x, y);
-    typewriter.render();
+    typewriter->render();
+}
+
+void Dialogue::speak() {
+    voice->speak();
+    typewriter->type();
+}
+
+void Dialogue::skip_speaking() {
+    voice->stop_speaking();
+    typewriter->skip_to_end();
+}
+
+bool Dialogue::is_speaking() { return voice->is_speaking(); }
+
+void Dialogue::set_text(std::string new_text) {
+    this->text = new_text;
+    voice->set_text(new_text);
+    typewriter->set_text(new_text);
 }

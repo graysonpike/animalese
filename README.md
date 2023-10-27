@@ -12,8 +12,7 @@ of a series of high-pitched babbles that roughly correspond to the letters
 and syllables being spoken.
 
 The real Animal Crossing games use over 200 syllables to match the tones of
-words being spoken, each approximately 150ms of audio, and all based on the
-sounds of Japanese kana, the original language of the game.
+words being spoken, with each being approximately 150ms of audio.
 
 ### How is it implemented here?
 
@@ -30,6 +29,20 @@ For example, `"Hello, word!"` becomes `"h w"`.
 Then, the sound corresponding to each letter of the shortened sentence is
 played. Each sound is randomly pitched up or down by a small amount to add
 a more dynamic speaking sound and avoid a monotonous effect.
+
+### Audio library
+
+In my first attempt to implement Animalese, [SDLGL](https://github.com/graysonpike/sdlgl)
+used [SDL_Mixer](https://github.com/libsdl-org/SDL_mixer) as it's audio backend.
+While SDL_Mixer is great for simple applications, I quickly discovered that it
+was missing a few features I needed, primarily pitching of audio samples and
+mixing an arbitrary number of samples.
+
+I re-implmeneted SDLGL's audio system to use David Reid's
+[miniaudio](https://github.com/mackron/miniaudio), a lightweight header-only
+library for audio playback and capture. In addition to supporting pitching sounds,
+it also supports 3D spatialization of audio, custom filters and effects,
+a tree-based grouping system, and built-in resource management.
 
 ## Building from source
 
