@@ -10,10 +10,11 @@
 
 Typewriter::Typewriter() {}
 
-Typewriter::Typewriter(int x, int y, std::string font, SDL_Color color,
+Typewriter::Typewriter(int x, int y, int max_width, std::string font, SDL_Color color,
                        float word_duration)
     : x(x),
       y(y),
+      max_width(max_width),
       font(std::move(font)),
       color(color),
       typing_timer(word_duration),
@@ -59,7 +60,7 @@ void Typewriter::render() {
         return;
     }
     std::shared_ptr<SDL_Texture> text_texture =
-        Graphics::load_font_texture(font, displayed_text, color, 400);
+        Graphics::load_font_texture(font, displayed_text, color, max_width);
 
     int texture_width, texture_height;
     SDL_QueryTexture(text_texture.get(), NULL, NULL, &texture_width,

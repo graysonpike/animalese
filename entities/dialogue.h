@@ -11,8 +11,9 @@
 // begin speaking and typing the next paragraph.
 class Dialogue : public PhysicalEntity {
    public:
+    enum class FacePosition { left, right };
     Dialogue(const std::shared_ptr<Scene> &scene, std::shared_ptr<Voice> voice,
-             Texture face, std::string text = "");
+             Texture face, std::string text = "", FacePosition facing = FacePosition::left);
     void update() override;
     void render() override;
     void speak();
@@ -27,6 +28,7 @@ class Dialogue : public PhysicalEntity {
     std::shared_ptr<Typewriter> typewriter;
     Texture face;
     std::string text;
+    FacePosition facing;
 };
 
 #endif

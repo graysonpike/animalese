@@ -30,17 +30,17 @@ std::vector<ConversationEntry> get_script() {
 std::shared_ptr<Conversation> create_demo_conversation_entity(
     std::shared_ptr<Scene> scene) {
     // 1.3 and 1.5 are the pitches for male and female respectively
-    Texture devika_face = Resources::get_instance().get_texture("devika");
-    Dialogue devika_dialogue =
-        Dialogue(scene, std::make_shared<Voice>(1.5f), devika_face);
+    Texture character1_face = Resources::get_instance().get_texture("character1");
+    Dialogue character1_dialogue =
+        Dialogue(scene, std::make_shared<Voice>(1.3f), character1_face);
 
-    Texture grayson_face = Resources::get_instance().get_texture("devika");
-    Dialogue grayson_dialogue =
-        Dialogue(scene, std::make_shared<Voice>(1.3f), grayson_face);
+    Texture character2_face = Resources::get_instance().get_texture("character2");
+    Dialogue character2_dialogue =
+        Dialogue(scene, std::make_shared<Voice>(1.5f), character2_face, "", Dialogue::FacePosition::right);
 
     std::map<std::string, Dialogue> characters;
-    characters.emplace("devika", devika_dialogue);
-    characters.emplace("grayson", grayson_dialogue);
+    characters.emplace("character1", character1_dialogue);
+    characters.emplace("character2", character2_dialogue);
 
     std::shared_ptr<Conversation> conversation =
         std::make_shared<Conversation>(scene, characters, get_script());
@@ -49,7 +49,7 @@ std::shared_ptr<Conversation> create_demo_conversation_entity(
 }
 
 int main() {
-    Graphics::initialize(640, 480);
+    Graphics::initialize(720, 480);
     Context context(std::make_shared<Clock>());
     std::shared_ptr<Scene> scene = std::make_shared<Scene>();
     Resources::get_instance().load_resources("resources.json");

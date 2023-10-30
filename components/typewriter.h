@@ -10,7 +10,7 @@
 class Typewriter {
    public:
     Typewriter();
-    Typewriter(int x, int y, std::string font = "base_text",
+    Typewriter(int x, int y, int max_width, std::string font = "base_text",
                SDL_Color color = {0, 0, 0}, float word_duration = 0.08f);
     // Must be called by parent's `update()` function.
     void update();
@@ -26,6 +26,7 @@ class Typewriter {
    private:
     int x;
     int y;
+    int max_width;
     std::string font;
     SDL_Color color;
     std::string text;
