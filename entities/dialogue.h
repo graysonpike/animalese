@@ -42,7 +42,9 @@ class Dialogue : public PhysicalEntity {
     int face_y;
 
     void set_width_and_height_from_screen_size();
+    // Must be called after `set_width_and_height_from_screen_size()`
     void set_face_and_text_positioning();
+    // Must be called after `set_face_and_text_positioning()`
     void create_typewriter();
 };
 
