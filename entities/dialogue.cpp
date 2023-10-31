@@ -6,6 +6,32 @@
 
 #define DIALOGUE_NAME_TEXT_PADDING_PX (30)
 
+void Dialogue::set_width_and_height_from_screen_size() {
+    Graphics &graphics = Graphics::get_instance();
+    w = graphics.get_width();
+    h = graphics.get_height();
+}
+
+void Dialogue::set_face_and_text_positioning() {
+    text_x = face.get_width();
+    text_y = h - face.get_height() + 30;
+    // Draw face snapped to left or right side of screen, depending on `facing`
+    if (facing == FacePosition::left) {
+        face_x = 0;
+    }
+    if (facing == FacePosition::right) {
+        face_x = w - face.get_width();
+    }
+    face_y = h - face.get_height();
+}
+
+void Dialogue::create_typewriter() {
+    int typewriter_y = name.empty() ? 0 : text_y + DIALOGUE_NAME_TEXT_PADDING_PX;
+    int typewriter_max_width = w - (2 * face.get_width());
+    typewriter = std::make_shared<Typewriter>(
+            text_x, typewriter_y, typewriter_max_width, font, text_color);
+}
+
 Dialogue::Dialogue(const std::shared_ptr<Scene> &scene,
                    std::shared_ptr<Voice> voice, Texture face, std::string font,
                    SDL_Color text_color, SDL_Color name_color, std::string text,
@@ -19,24 +45,9 @@ Dialogue::Dialogue(const std::shared_ptr<Scene> &scene,
       text(text),
       name(name),
       facing(facing) {
-    Graphics &graphics = Graphics::get_instance();
-    // Dialogue renders to fit screen size
-    w = graphics.get_width();
-    h = graphics.get_height();
-    text_x = face.get_width();
-    text_y = h - face.get_height() + 30;
-    // Draw face snapped to left or right side of screen, depending on `facing`
-    if (facing == FacePosition::left) {
-        face_x = 0;
-    }
-    if (facing == FacePosition::right) {
-        face_x = w - face.get_width();
-    }
-    face_y = h - face.get_height();
-    int typewriter_y = name.empty() ? 0 : text_y + DIALOGUE_NAME_TEXT_PADDING_PX;
-    int typewriter_max_width = w - (2 * face.get_width());
-    typewriter = std::make_shared<Typewriter>(
-        text_x, typewriter_y, typewriter_max_width, font, text_color);
+    set_width_and_height_from_screen_size();
+    set_face_and_text_positioning();
+    create_typewriter();
     set_text(text);
 }
 

@@ -40,6 +40,10 @@ class Dialogue : public PhysicalEntity {
     int text_y;
     int face_x;
     int face_y;
+
+    void set_width_and_height_from_screen_size();
+    void set_face_and_text_positioning();
+    void create_typewriter();
 };
 
 #endif
