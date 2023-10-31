@@ -13,7 +13,10 @@ class Dialogue : public PhysicalEntity {
    public:
     enum class FacePosition { left, right };
     Dialogue(const std::shared_ptr<Scene> &scene, std::shared_ptr<Voice> voice,
-             Texture face, std::string text = "", FacePosition facing = FacePosition::left);
+             Texture face, std::string font = "base_text",
+             SDL_Color text_color = {0, 0, 0}, SDL_Color name_color = {0, 0, 0},
+             std::string text = "", std::string name = "",
+             FacePosition facing = FacePosition::left);
     void update() override;
     void render() override;
     void speak();
@@ -27,8 +30,16 @@ class Dialogue : public PhysicalEntity {
     std::shared_ptr<Voice> voice;
     std::shared_ptr<Typewriter> typewriter;
     Texture face;
+    std::string font;
+    SDL_Color text_color;
+    SDL_Color name_color;
     std::string text;
+    std::string name;
     FacePosition facing;
+    int text_x;
+    int text_y;
+    int face_x;
+    int face_y;
 };
 
 #endif

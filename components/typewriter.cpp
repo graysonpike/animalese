@@ -10,8 +10,8 @@
 
 Typewriter::Typewriter() {}
 
-Typewriter::Typewriter(int x, int y, int max_width, std::string font, SDL_Color color,
-                       float word_duration)
+Typewriter::Typewriter(int x, int y, int max_width, std::string font,
+                       SDL_Color color, float word_duration)
     : x(x),
       y(y),
       max_width(max_width),
