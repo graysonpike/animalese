@@ -1,7 +1,7 @@
 {
     "textures": {
-        "character1": {"filename": "character1_200.png"},
-        "character2": {"filename": "character2_200.png"}
+        "devika": {"filename": "devika.png"},
+        "laura": {"filename": "laura.png"}
     },
     "fonts": {
         "base_text": {

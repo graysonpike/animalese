@@ -1,9 +1,11 @@
 {
     "script": [
-        {"character":  "character1", "text": "This is a demo of the Animalese conversation dialogue!"},
-        {"character":  "character2", "text":  "Animalese supports any pitch of voice."},
-        {"character":  "character1", "text":  "It also makes configurable conversations really easy. Try it yourself!"},
-        {"character":  "character1", "text":  "Use the JSON file to create your own conversation."},
-        {"character":  "character2", "text":  "Let's see how this dialogue box supports really long sentences. Oh wow, Grayson even implemented text wrapping!"}
+        {"character":  "devika", "text": "This is a demo of the Animalese conversation dialogue!"},
+        {"character":  "laura", "text":  "Animalese supports any pitch of voice."},
+        {"character":  "devika", "text":  "It also makes configurable conversations really easy. Try it yourself!"},
+        {"character":  "devika", "text":  "Use the JSON file to create your own conversation."},
+        {"character":  "laura", "text":  "Let's see how this dialogue box supports really long sentences. Oh wow, Grayson even implemented text wrapping!"},
+        {"character":  "devika", "text":  "That's cool! Now if Grayson would actually make a real game instead of adding features to his game engine..."},
+        {"character":  "devika", "text":  "Maybe next year. :)"}
     ]
 }

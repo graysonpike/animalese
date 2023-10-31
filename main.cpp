@@ -30,21 +30,21 @@ std::vector<ConversationEntry> get_script() {
 std::shared_ptr<Conversation> create_demo_conversation_entity(
     std::shared_ptr<Scene> scene) {
     // 1.3 and 1.5 are the pitches for male and female respectively
-    Texture character1_face =
-        Resources::get_instance().get_texture("character1");
-    Dialogue character1_dialogue =
-        Dialogue(scene, std::make_shared<Voice>(1.3f), character1_face, "base_text",
+    Texture devika_face =
+        Resources::get_instance().get_texture("devika");
+    Dialogue devika_dialogue =
+        Dialogue(scene, std::make_shared<Voice>(1.3f), devika_face, "base_text",
             {0, 0, 0}, {190, 35, 25}, "", "Devika", Dialogue::FacePosition::left);
 
-    Texture character2_face =
-        Resources::get_instance().get_texture("character2");
-    Dialogue character2_dialogue = Dialogue(
-        scene, std::make_shared<Voice>(1.5f), character2_face, "base_text",
-        {0, 0, 0}, {20, 50, 165}, "", "Grayson", Dialogue::FacePosition::right);
+    Texture laura_face =
+        Resources::get_instance().get_texture("laura");
+    Dialogue laura_dialogue = Dialogue(
+        scene, std::make_shared<Voice>(1.5f), laura_face, "base_text",
+        {0, 0, 0}, {20, 50, 165}, "", "Laura", Dialogue::FacePosition::right);
 
     std::map<std::string, Dialogue> characters;
-    characters.emplace("character1", character1_dialogue);
-    characters.emplace("character2", character2_dialogue);
+    characters.emplace("devika", devika_dialogue);
+    characters.emplace("laura", laura_dialogue);
 
     std::shared_ptr<Conversation> conversation =
         std::make_shared<Conversation>(scene, characters, get_script());
