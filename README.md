@@ -2,6 +2,8 @@
 A program to replicate the Animalese speech sound effects of the video game
 Animal Crossing. It's built with SDLGL, my game custom SDL2-based game library.
 
+![](screenshots/animalese_screenshot.png)
+
 ## How it works
 
 ### What is animalese?
